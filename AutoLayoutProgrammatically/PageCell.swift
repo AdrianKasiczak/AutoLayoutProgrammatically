@@ -10,13 +10,20 @@ import UIKit
 
 class PageCell: UICollectionViewCell {
     
+    var page: Page? {
+        didSet {
+            laptopImageView.image = UIImage(named: page!.imageName)
+            
+        }
+    }
+    
     override init(frame: CGRect) {
         super .init(frame: frame)
         
         setupLayout()
     }
     
-    let laptopImageView: UIImageView = {
+    private let laptopImageView: UIImageView = {
         let imageView = UIImageView(image: #imageLiteral(resourceName: "1laptop"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
@@ -24,7 +31,7 @@ class PageCell: UICollectionViewCell {
     }()
     
     
-    let descriptionTextView: UITextView = {
+    private let descriptionTextView: UITextView = {
         let textView = UITextView()
         
         let attributedText = NSMutableAttributedString(string: "Are you ready to check out this beast?", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18)])
