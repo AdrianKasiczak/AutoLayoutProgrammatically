@@ -19,7 +19,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = ViewController()
+        
+        let collectionFlowLayout = UICollectionViewFlowLayout()
+        collectionFlowLayout.scrollDirection = .horizontal
+        let swipingController = SwipingController(collectionViewLayout: collectionFlowLayout)
+        
+        window?.rootViewController = swipingController
         
         return true
     }
