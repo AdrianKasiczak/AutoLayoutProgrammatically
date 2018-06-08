@@ -13,7 +13,8 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
     let pages = [
         Page(imageName: "1laptop", headerString:"Are you ready to check out this beast?", bodyText: "\n\n\n Our new laptop is the most powerfull computer ever. That is why we call him Beastest Beast!"),
         Page(imageName: "1cloud", headerString:"Cloud synchronization around the world", bodyText: "\n\n\n The newest cloud synchronization system will give you access to your files on all devices"),
-        Page(imageName: "1cpu", headerString:"The most powerfull CPU with acceleration", bodyText: "\n\n\n 7th generation of CPU with hyper-acceleration guarantee you the highest performance and the most satisfying pleasure")
+        Page(imageName: "1cpu", headerString:"The most powerfull CPU with acceleration", bodyText: "\n\n\n 7th generation of CPU with hyper-acceleration guarantee you the highest performance and the most satisfying pleasure"),
+        Page(imageName: "1memory", headerString: "Have you ever touched the sky?", bodyText: "\n\n\n Excellent cooperation memory and CPU will let you know that the sky is the limit!")
     ]
     
     private let prevButton: UIButton = {
@@ -29,7 +30,7 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
     @objc private func handlePrevPage() {
         print("hello")
         
-        let prevIndex = min(pageController.currentPage - 1, pages.count + 1)
+        let prevIndex = max(pageController.currentPage - 1, 0)
         let indexPath = IndexPath(item: prevIndex, section: 0)
         pageController.currentPage = prevIndex
         
@@ -84,6 +85,11 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
             ])
     }
     
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let x = targetContentOffset.pointee.x
+        
+        pageController.currentPage = Int(x / view.frame.width)
+    }
     
     
     override func viewDidLoad() {
@@ -94,6 +100,21 @@ class SwipingController: UICollectionViewController, UICollectionViewDelegateFlo
         bottomControlsSetup()
         
         collectionView?.isPagingEnabled = true
+    }
+    
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { (_) in
+            self.collectionViewLayout.invalidateLayout()
+            
+            if self.pageController.currentPage == 0 {
+                self.collectionView?.contentOffset = .zero
+            } else {
+                let indexPath = IndexPath(item: self.pageController.currentPage, section: 0)
+                
+                self.collectionView?.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            }
+        })
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

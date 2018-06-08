@@ -12,5 +12,4 @@ struct Page {
     let imageName: String
     let headerString: String
     let bodyText: String
-    
 }
