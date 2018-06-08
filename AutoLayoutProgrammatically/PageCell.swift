@@ -12,8 +12,16 @@ class PageCell: UICollectionViewCell {
     
     var page: Page? {
         didSet {
-            laptopImageView.image = UIImage(named: page!.imageName)
             
+            guard let unwrappedPage = page else { return }
+            
+            let attributedText = NSMutableAttributedString(string: unwrappedPage.headerString, attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18)])
+            attributedText.append(NSAttributedString(string: unwrappedPage.bodyText, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 13),NSAttributedStringKey.foregroundColor: UIColor.gray]))
+            
+            laptopImageView.image = UIImage(named: unwrappedPage.imageName)
+            
+            descriptionTextView.attributedText = attributedText
+            descriptionTextView.textAlignment = .center
         }
     }
     
